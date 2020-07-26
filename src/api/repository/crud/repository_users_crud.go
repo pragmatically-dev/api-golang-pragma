@@ -118,6 +118,36 @@ func (repository *RepositoryUsersCRUD) FindByID(_ID primitive.ObjectID) (models.
 	return models.User{}, errors.New("No se ha encontrado el registro")
 }
 
-//TODO: Implementar Update(primitive.ObjectID, models.User) (primitive.ObjectID, error)
+//Update se encarga de actualizar un registro mediante su id
+func (repository *RepositoryUsersCRUD) Update(_ID primitive.ObjectID, user models.User) (primitive.ObjectID, error) {
+	var userID primitive.ObjectID
+	done := make(chan bool)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	go func(ch chan<- bool) {
+		var Newuser = models.User{
+			ID:        _ID,
+			Nickname:  user.Nickname,
+			Email:     user.Email,
+			Password:  user.Password,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: time.Now(),
+		}
+		_, err := repository.db.Collection("Users").UpdateOne(ctx, bson.M{"_id": _ID}, bson.M{"$set": &Newuser})
+		if err != nil {
+			ch <- false
+			return
+		}
+		userID = _ID
+		ch <- true
+		return
+	}(done)
+
+	if channels.OK(done) {
+		return userID, nil
+	}
+	return primitive.NilObjectID, errors.New("No se ha podido actualizar el registro")
+}
 
 //TODO: Implementar Delete(primitive.ObjectID) (primitive.ObjectID, error)
