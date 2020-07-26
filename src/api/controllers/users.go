@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -64,7 +65,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user := models.User{}
-	err = json.Unmarshal(body, &user) //verifica si puede ser convertido a json
+	err = json.Unmarshal(body, &user) //verifica si puede ser convertido a la struct User
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err) //manejador de errores
 		return
@@ -84,8 +85,37 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 //UpdateUser update an user
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	//TODO crear controlador UpdateUser
-	w.Write([]byte("actualiza de usuarios"))
+	vars := mux.Vars(r)
+	body, err := ioutil.ReadAll(r.Body) //se encarga de obtener todo el contenido del body
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	Newuser := models.User{}
+	err = json.Unmarshal(body, &Newuser) //verifica si puede ser convertido a un <<User>> y si es asi, lo convierte
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err) //manejador de errores
+		return
+	}
+	_ID, err := primitive.ObjectIDFromHex(vars["id"]) //obtiene el id para realizar una actualizacion de un registro x
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	repo, err := repository.GetRepositoryCrud(w, r) //obtiene la estructura *RepositoryUsersCRUD
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	//funcion anonima que se encarga de tomar como parametro a cualquier estructura que implemente la interfaz UserRepository
+	func(userRepository repository.UserRepository) {
+		userID, err := userRepository.Update(_ID, Newuser)
+		if err != nil {
+			responses.ERROR(w, http.StatusInternalServerError, err)
+			return
+		}
+		responses.JSON(w, http.StatusOK, fmt.Sprintf("Updated document ID: [ %s ]  at %s ", userID.String(), time.Now()))
+	}(repo) //--> se callea la funcion anonima mediante ()
 }
 
 //DeleteUser delete an user
