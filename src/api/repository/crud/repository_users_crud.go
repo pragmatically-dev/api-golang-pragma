@@ -150,4 +150,23 @@ func (repository *RepositoryUsersCRUD) Update(_ID primitive.ObjectID, user model
 	return primitive.NilObjectID, errors.New("No se ha podido actualizar el registro")
 }
 
-//TODO: Implementar Delete(primitive.ObjectID) (primitive.ObjectID, error)
+//Delete se encarga de eliminar un registro mediante su id
+func (repository *RepositoryUsersCRUD) Delete(_ID primitive.ObjectID) (bool, error) {
+	done := make(chan bool)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	go func(ch chan<- bool) {
+		_, err := repository.db.Collection("Users").DeleteOne(ctx, bson.M{"_id": _ID})
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}(done)
+
+	if channels.OK(done) {
+		return true, nil
+	}
+	return false, errors.New("No se ha podido eliminar el registro")
+}

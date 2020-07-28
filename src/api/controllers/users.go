@@ -120,6 +120,28 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 //DeleteUser delete an user
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	//TODO: Crear controlador de DeleteUser
-	w.Write([]byte("elimina usuarios"))
+	vars := mux.Vars(r)
+	_ID, err := primitive.ObjectIDFromHex(vars["id"])
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	repo, err := repository.GetRepositoryCrud(w, r)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	func(userRepository repository.UserRepository) {
+		isDeleted, err := userRepository.Delete(_ID)
+		if err != nil {
+			responses.ERROR(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		if isDeleted {
+			responses.JSON(w, http.StatusOK, fmt.Sprintf("User deleted: %t", isDeleted))
+		}
+
+	}(repo)
+
 }

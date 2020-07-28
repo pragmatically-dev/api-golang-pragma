@@ -17,7 +17,7 @@ type UserRepository interface {
 	FindAll() ([]models.User, error)
 	FindByID(primitive.ObjectID) (models.User, error)
 	Update(primitive.ObjectID, models.User) (primitive.ObjectID, error)
-	//Delete(primitive.ObjectID) (primitive.ObjectID, error)
+	Delete(primitive.ObjectID) (bool, error)
 }
 
 //GetRepositoryCrud obtiene un puntero a la estructura RepositoryUsersCRUD
