@@ -10,5 +10,4 @@ Mi primera api rest en golang
 6- Aplicar correctamente el manejo de query's a la db por medio de goroutines\
 7- Aplicar un correcto uso de interfaces
 
-#TODOS\
--[X] Terminar de implementar la interfaz UserRepository ->TERMINADO
+
