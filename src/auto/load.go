@@ -16,10 +16,18 @@ func Load() {
 	}
 
 	defer db.Disconnect(ctx)
-
-	for _, user := range users {
-		user.BeforeSave()
-		result, err := db.Database(config.DBNAME).Collection("Users").InsertOne(ctx, &user)
+	/*
+		for _, user := range users {
+			user.BeforeSave()
+			result, err := db.Database(config.DBNAME).Collection("Users").InsertOne(ctx, &user)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			fmt.Println(result)
+		}
+	*/
+	for _, post := range posts {
+		result, err := db.Database(config.DBNAME).Collection("Posts").InsertOne(ctx, &post)
 		if err != nil {
 			log.Fatalln(err)
 		}

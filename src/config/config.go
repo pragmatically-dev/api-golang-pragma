@@ -11,6 +11,7 @@ var (
 	PORT   = 0
 	DBURL  = ""
 	DBNAME = "restapi"
+	EPASS  = ""
 )
 
 //Load se encarga de configurar el puerto de escucha del servidor y las variables de entorno
@@ -22,4 +23,5 @@ func Load() {
 	}
 
 	DBURL = os.Getenv("DB_URI")
+	EPASS = os.Getenv("EPASS")
 }
