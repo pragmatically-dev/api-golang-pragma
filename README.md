@@ -11,4 +11,4 @@ Mi primera api rest en golang
 7- Aplicar un correcto uso de interfaces
 
 #TODOS
-- Terminar de implementar la interfaz UserRepository
+-[X] Terminar de implementar la interfaz UserRepository ->TERMINADO
