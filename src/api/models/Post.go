@@ -1,9 +1,12 @@
 package models
 
 import (
+<<<<<<< HEAD
 	"errors"
 	"html"
 	"strings"
+=======
+>>>>>>> 44d8fadc7ecbfbf78708d2b012037f3c8fd955b7
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -23,13 +26,17 @@ type Post struct {
 //BeforeSave se encarga de generar el id del post y de inicializar las fechas
 func (p *Post) BeforeSave() error {
 	p.ID = primitive.NewObjectID()
+<<<<<<< HEAD
 	p.Title = html.EscapeString(strings.TrimSpace(p.Title))
 	p.Author = User{}
+=======
+>>>>>>> 44d8fadc7ecbfbf78708d2b012037f3c8fd955b7
 	p.CreatedAt = time.Now()
 	p.UpdatedAt = time.Now()
 
 	return nil
 }
+<<<<<<< HEAD
 
 //Validate verifica que los campos requeridos no esten vacios
 func (p Post) Validate() error {
@@ -44,3 +51,5 @@ func (p Post) Validate() error {
 	}
 	return nil
 }
+=======
+>>>>>>> 44d8fadc7ecbfbf78708d2b012037f3c8fd955b7
