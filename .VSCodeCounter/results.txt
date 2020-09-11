@@ -1,0 +1,61 @@
+Date : 2020-07-28 18:50:25
+Directory : c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest
+Total : 19 files,  699 codes, 75 comments, 130 blanks, all 904 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Go       |         19 |        699 |         75 |        130 |        904 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                         | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                            |         19 |        699 |         75 |        130 |        904 |
+| src                                                                                                                          |         19 |        699 |         75 |        130 |        904 |
+| src\api                                                                                                                      |         15 |        631 |         62 |        111 |        804 |
+| src\api\controllers                                                                                                          |          1 |        127 |          9 |         12 |        148 |
+| src\api\database                                                                                                             |          1 |         18 |          2 |          6 |         26 |
+| src\api\emails                                                                                                               |          1 |         73 |         11 |         14 |         98 |
+| src\api\middlewares                                                                                                          |          1 |         17 |          2 |          4 |         23 |
+| src\api\models                                                                                                               |          2 |         90 |          7 |         15 |        112 |
+| src\api\repository                                                                                                           |          2 |        167 |         17 |         25 |        209 |
+| src\api\repository\crud                                                                                                      |          1 |        140 |         15 |         20 |        175 |
+| src\api\responses                                                                                                            |          1 |         24 |          2 |          4 |         30 |
+| src\api\router                                                                                                               |          3 |         72 |          6 |         19 |         97 |
+| src\api\router\routes                                                                                                        |          2 |         63 |          4 |         16 |         83 |
+| src\api\security                                                                                                             |          1 |         10 |          2 |          4 |         16 |
+| src\api\utils                                                                                                                |          1 |         10 |          1 |          2 |         13 |
+| src\api\utils\channels                                                                                                       |          1 |         10 |          1 |          2 |         13 |
+| src\auto                                                                                                                     |          2 |         42 |         11 |         11 |         64 |
+| src\config                                                                                                                   |          1 |         21 |          2 |          5 |         28 |
+| src\main                                                                                                                     |          1 |          5 |          0 |          3 |          8 |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                     | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\controllers\users.go                     | Go       |        127 |          9 |         12 |        148 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\database\db.go                           | Go       |         18 |          2 |          6 |         26 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\emails\email_sender.go                   | Go       |         73 |         11 |         14 |         98 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\middlewares\middlewares.go               | Go       |         17 |          2 |          4 |         23 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\models\Post.go                           | Go       |         20 |          2 |          6 |         28 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\models\User.go                           | Go       |         70 |          5 |          9 |         84 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\repository\crud\repository_users_crud.go | Go       |        140 |         15 |         20 |        175 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\repository\repository_users.go           | Go       |         27 |          2 |          5 |         34 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\responses\json.go                        | Go       |         24 |          2 |          4 |         30 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\router\router.go                         | Go       |          9 |          2 |          3 |         14 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\router\routes\routes.go                  | Go       |         31 |          4 |          7 |         42 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\router\routes\users_routes.go            | Go       |         32 |          0 |          9 |         41 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\security\password.go                     | Go       |         10 |          2 |          4 |         16 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\server.go                                | Go       |         23 |          3 |          6 |         32 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\api\utils\channels\channels.go               | Go       |         10 |          1 |          2 |         13 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\auto\data.go                                 | Go       |         21 |          0 |          6 |         27 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\auto\load.go                                 | Go       |         21 |         11 |          5 |         37 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\config\config.go                             | Go       |         21 |          2 |          5 |         28 |
+| c:\Users\Pragmatically-dev\code\go\src\github.com\pragmatically-dev\apirest\src\main\main.go                                 | Go       |          5 |          0 |          3 |          8 |
+| Total                                                                                                                        |          |        699 |         75 |        130 |        904 |
++------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

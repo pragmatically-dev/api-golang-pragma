@@ -17,6 +17,7 @@ type Route struct {
 //Load retorna un slice de Route cargado con las rutas
 func Load() []Route {
 	routes := usersRoutes
+
 	return routes
 }
 

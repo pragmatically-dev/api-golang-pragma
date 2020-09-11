@@ -14,6 +14,7 @@ import (
 func Run() {
 	config.Load()
 	//auto.Load()
+	//emails.Test()
 	fmt.Printf("\nServer on port %d", config.PORT)
 	fmt.Printf("\n\nDB IS CONNECTED\n")
 	Listen(config.IP, config.PORT)

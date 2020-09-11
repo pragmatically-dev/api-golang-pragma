@@ -25,39 +25,48 @@ func NewRepositoryUsersCRUD(db *mongo.Database) *RepositoryUsersCRUD {
 
 //Save guarda el usuario en la base de datos
 func (repository *RepositoryUsersCRUD) Save(user models.User) (models.User, error) {
-	var err error
+	var globalerror error
+	collection := repository.db.Collection("Users")
 	done := make(chan bool) //crea un canal que comunica valores boleanos
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	//go function
 	//Se encarga de insertar el usuario en la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
-		nick := repository.db.Collection("Users").FindOne(ctx, models.User{Nickname: user.Nickname})
-		email := repository.db.Collection("Users").FindOne(ctx, models.User{Email: user.Email})
-		if nick.Err() != nil && email.Err() != nil {
-			var result *mongo.InsertOneResult
-			user.BeforeSave()
-			result, err = repository.db.Collection("Users").InsertOne(ctx, &user)
+		defer close(ch)
+		//validacion
+		isAvailable, err := user.ValidateAvailability(collection)
+		if err != nil {
+			globalerror = err
+			ch <- false
+			return
+		}
+		if isAvailable {
+			err := user.BeforeSave()
 			if err != nil {
+				globalerror = err
 				ch <- false
 				return
 			}
-			if result != nil {
-				ch <- true
+			_, err = collection.InsertOne(ctx, &user)
+			if err != nil {
+				ch <- false
+				globalerror = err
+				return
 			}
+			ch <- true
+			return
+
 		} else {
 			ch <- false
 			return
 		}
-
 	}(done)
 
 	if channels.OK(done) {
 		return user, nil
-	} else {
-		return user, errors.New("El nickname o email ya estan siendo utilizado")
 	}
-
+	return user, globalerror
 }
 
 //FindAll se encarga de retornar todos los usuarios de la base de datos
@@ -69,7 +78,8 @@ func (repository *RepositoryUsersCRUD) FindAll() ([]models.User, error) {
 	//go function
 	//Se encarga de recuperar todos los usuarios de la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
-		defer cancel()
+		//defer cancel()
+		defer close(ch)
 		cursor, err := repository.db.Collection("Users").Find(ctx, bson.M{})
 		defer cursor.Close(ctx)
 		if err != nil {
@@ -102,6 +112,7 @@ func (repository *RepositoryUsersCRUD) FindByID(_ID primitive.ObjectID) (models.
 	//go function
 	//Se encarga de recuperar todos los usuarios de la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
+		defer close(ch)
 		err := repository.db.Collection("Users").FindOne(ctx, models.User{ID: _ID}).Decode(&user)
 		if err != nil {
 			ch <- false
@@ -118,6 +129,51 @@ func (repository *RepositoryUsersCRUD) FindByID(_ID primitive.ObjectID) (models.
 	return models.User{}, errors.New("No se ha encontrado el registro")
 }
 
-//TODO: Implementar Update(primitive.ObjectID, models.User) (primitive.ObjectID, error)
+//Update se encarga de actualizar un registro mediante su id
+func (repository *RepositoryUsersCRUD) Update(_ID primitive.ObjectID, user models.User) (primitive.ObjectID, error) {
+	var userID primitive.ObjectID
+	done := make(chan bool)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-//TODO: Implementar Delete(primitive.ObjectID) (primitive.ObjectID, error)
+	go func(ch chan<- bool) {
+		defer close(ch)
+		user.UpdateAt()
+		user.Verify()
+		_, err := repository.db.Collection("Users").UpdateOne(ctx, bson.M{"_id": _ID}, bson.M{"$set": &user})
+		if err != nil {
+			ch <- false
+			return
+		}
+		userID = _ID
+		ch <- true
+		return
+	}(done)
+
+	if channels.OK(done) {
+		return userID, nil
+	}
+	return primitive.NilObjectID, errors.New("No se ha podido actualizar el registro")
+}
+
+//Delete se encarga de eliminar un registro mediante su id
+func (repository *RepositoryUsersCRUD) Delete(_ID primitive.ObjectID) (bool, error) {
+	done := make(chan bool)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	go func(ch chan<- bool) {
+		defer close(ch)
+		_, err := repository.db.Collection("Users").DeleteOne(ctx, bson.M{"_id": _ID})
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}(done)
+
+	if channels.OK(done) {
+		return true, nil
+	}
+	return false, errors.New("No se ha podido eliminar el registro")
+}
