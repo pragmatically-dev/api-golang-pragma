@@ -18,7 +18,7 @@ type Sender struct {
 	Password     string
 	EmailReciver string
 }
-
+        
 //SendEmail se encarga de usar un cliente smtp para enviar mails a diferentes receptores
 func (s *Sender) SendEmail(msg []byte, reciver string) (bool, error) {
 
@@ -70,7 +70,11 @@ func Test() {
 
 	body := `
 		<h1>Este es un email de prueba enviado desde el servidor :,)</h1>
+<<<<<<< HEAD
 		<h1>Tu codigo de verificacion es: 9000  \n\n </h1>
+=======
+		<h1>Tu codigo de verificacion es: 6969  \n\n(TODO: IMPLEMENTAR VERIFICACION DE EMAIL) </h1>
+>>>>>>> 44d8fadc7ecbfbf78708d2b012037f3c8fd955b7
 		`
 
 	var bodyMessage bytes.Buffer

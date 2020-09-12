@@ -20,6 +20,6 @@ func Connect() (context.Context, *mongo.Client, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-
+      
 	return ctx, client, nil
 }

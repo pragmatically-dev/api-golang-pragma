@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/pragmatically-dev/apirest/src/api/emails"
 	"github.com/pragmatically-dev/apirest/src/api/router"
 	"github.com/pragmatically-dev/apirest/src/config"
 )

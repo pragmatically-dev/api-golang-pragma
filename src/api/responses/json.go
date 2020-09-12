@@ -12,7 +12,7 @@ func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
 		fmt.Fprintf(w, "%s", err.Error())
-	}
+	}        
 }
 
 //ERROR manejador de errores

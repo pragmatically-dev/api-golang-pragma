@@ -33,7 +33,6 @@ func (repository *RepositoryUsersCRUD) Save(user models.User) (models.User, erro
 	//go function
 	//Se encarga de insertar el usuario en la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
-		defer close(ch)
 		//validacion
 		isAvailable, err := user.ValidateAvailability(collection)
 		if err != nil {
@@ -78,8 +77,7 @@ func (repository *RepositoryUsersCRUD) FindAll() ([]models.User, error) {
 	//go function
 	//Se encarga de recuperar todos los usuarios de la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
-		//defer cancel()
-		defer close(ch)
+		defer cancel()
 		cursor, err := repository.db.Collection("Users").Find(ctx, bson.M{})
 		defer cursor.Close(ctx)
 		if err != nil {
@@ -112,7 +110,6 @@ func (repository *RepositoryUsersCRUD) FindByID(_ID primitive.ObjectID) (models.
 	//go function
 	//Se encarga de recuperar todos los usuarios de la base de datos, y transmite el resultado por medio de un canal boleano
 	go func(ch chan<- bool) {
-		defer close(ch)
 		err := repository.db.Collection("Users").FindOne(ctx, models.User{ID: _ID}).Decode(&user)
 		if err != nil {
 			ch <- false
@@ -131,15 +128,14 @@ func (repository *RepositoryUsersCRUD) FindByID(_ID primitive.ObjectID) (models.
 
 //Update se encarga de actualizar un registro mediante su id
 func (repository *RepositoryUsersCRUD) Update(_ID primitive.ObjectID, user models.User) (primitive.ObjectID, error) {
+	//TODO: VALIDAR LOS CAMPOS DEL USUARIO ACTUALIZADO
 	var userID primitive.ObjectID
 	done := make(chan bool)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	go func(ch chan<- bool) {
-		defer close(ch)
 		user.UpdateAt()
-		user.Verify()
 		_, err := repository.db.Collection("Users").UpdateOne(ctx, bson.M{"_id": _ID}, bson.M{"$set": &user})
 		if err != nil {
 			ch <- false
@@ -162,7 +158,6 @@ func (repository *RepositoryUsersCRUD) Delete(_ID primitive.ObjectID) (bool, err
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	go func(ch chan<- bool) {
-		defer close(ch)
 		_, err := repository.db.Collection("Users").DeleteOne(ctx, bson.M{"_id": _ID})
 		if err != nil {
 			ch <- false
