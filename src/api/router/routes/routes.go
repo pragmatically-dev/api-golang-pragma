@@ -13,7 +13,7 @@ type Route struct {
 	Method  string
 	Handler func(w http.ResponseWriter, r *http.Request)
 }
-
+        
 //Load retorna un slice de Route cargado con las rutas
 func Load() []Route {
 	routes := usersRoutes

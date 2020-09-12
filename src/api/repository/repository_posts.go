@@ -10,3 +10,4 @@ type PostRepository interface {
 	//Update(primitive.ObjectID, models.Post) (primitive.ObjectID, error)
 	//Delete(primitive.ObjectID) (bool, error)
 }
+    

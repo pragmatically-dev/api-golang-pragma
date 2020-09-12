@@ -29,7 +29,7 @@ func (p *Post) BeforeSave() error {
 	p.UpdatedAt = time.Now()
 
 	return nil
-}
+}    
 
 //Validate verifica que los campos requeridos no esten vacios
 func (p Post) Validate() error {
@@ -44,3 +44,4 @@ func (p Post) Validate() error {
 	}
 	return nil
 }
+          

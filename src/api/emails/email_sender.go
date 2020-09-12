@@ -18,7 +18,7 @@ type Sender struct {
 	Password     string
 	EmailReciver string
 }
-
+        
 //SendEmail se encarga de usar un cliente smtp para enviar mails a diferentes receptores
 func (s *Sender) SendEmail(msg []byte, reciver string) (bool, error) {
 

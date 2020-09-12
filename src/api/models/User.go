@@ -45,8 +45,8 @@ func (u *User) Verify() (bool, error) {
 	if err := checkmail.ValidateHost(u.Email); err != nil {
 		return false, errors.New("El host no responde,por favor ingrese un email valido")
 	}
-	return true, nil
-}
+	return true, nil     
+}    
 
 //BeforeSave pasa el password por una funcion de hash
 func (u *User) BeforeSave() error {
@@ -81,3 +81,4 @@ func (u *User) ValidateAvailability(collection *mongo.Collection) (bool, error) 
 		return false, errors.New("El Nickname o el Email ya estan siendo utilizados")
 	}
 }
+          

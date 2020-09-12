@@ -11,3 +11,4 @@ func New() *mux.Router {
 	//return routes.SetupRoutes(router)
 	return routes.SetupRoutesWithMiddlewares(router)
 }
+     
