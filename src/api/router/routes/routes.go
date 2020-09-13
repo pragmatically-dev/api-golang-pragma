@@ -13,11 +13,11 @@ type Route struct {
 	Method  string
 	Handler func(w http.ResponseWriter, r *http.Request)
 }
-        
+
 //Load retorna un slice de Route cargado con las rutas
 func Load() []Route {
-	routes := usersRoutes
-
+	var routes []Route
+	routes = append(postsRoutes, usersRoutes...)
 	return routes
 }
 
@@ -34,8 +34,9 @@ func SetupRoutesWithMiddlewares(router *mux.Router) *mux.Router {
 	for _, route := range Load() {
 		router.HandleFunc(
 			route.URI,
-			middlewares.SetMiddlewareLogger( // se encarga de que las request pasen atravez del middleware
-				middlewares.SetMiddlewareJSON(route.Handler)),
+			middlewares.SetMiddlewareLogger(
+				middlewares.SetMiddlewareJSON( // se encarga de que las request pasen atravez del middleware
+					middlewares.SetMiddleWareAuthentication(route.Handler))),
 		).Methods(route.Method) //crea un manejador por cada ruta definida en el slice de estructuras Route
 	}
 	return router
