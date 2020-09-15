@@ -172,3 +172,25 @@ func (repository *RepositoryUsersCRUD) Delete(_ID primitive.ObjectID) (bool, err
 	}
 	return false, errors.New("No se ha podido eliminar el registro")
 }
+
+//PushPost se encarga de agragar un post al arreglo de post del usuario
+func (repository *RepositoryUsersCRUD) PushPost(_ID primitive.ObjectID, post models.Post) (bool, error) {
+	done := make(chan bool)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	go func(ch chan<- bool) {
+
+		_, err := repository.db.Collection("Users").UpdateOne(ctx, primitive.M{"_id": _ID}, primitive.M{"$push": primitive.M{"posts": post}})
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}(done)
+
+	if channels.OK(done) {
+		return true, nil
+	}
+	return false, errors.New("No se ha podido agregar el post")
+}

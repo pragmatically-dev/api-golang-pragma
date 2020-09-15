@@ -14,14 +14,14 @@ import (
 
 //User es el modelo de usuario
 type User struct {
-	ID        primitive.ObjectID   `json:"_id,omitempty" bson:"_id,omitempty"`
-	Nickname  string               `json:"nick_name,omitempty" bson:"nick_name,omitempty"`
-	Email     string               `json:"email,omitempty" bson:"email,omitempty"`
-	Password  string               `json:"password,omitempty" bson:"password,omitempty"`
-	CreatedAt time.Time            `json:"created_at,omitempty" bson:"created_at,omitempty"`
-	UpdatedAt time.Time            `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
-	Posts     []primitive.ObjectID `json:"posts,omitempty" bson:"posts,omitempty"`
-} //TODO: Cambiar el tipo de Posts por un slice de String
+	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Nickname  string             `json:"nick_name,omitempty" bson:"nick_name,omitempty"`
+	Email     string             `json:"email,omitempty" bson:"email,omitempty"`
+	Password  string             `json:"password,omitempty" bson:"password,omitempty"`
+	CreatedAt time.Time          `json:"created_at,omitempty" bson:"created_at,omitempty"`
+	UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+	Posts     []Post             `json:"posts" bson:"posts"`
+}
 
 //UpdateAt se encarga de acutalizar la fecha de al actualizar un registro
 func (u *User) UpdateAt() {
@@ -45,8 +45,8 @@ func (u *User) Verify() (bool, error) {
 	if err := checkmail.ValidateHost(u.Email); err != nil {
 		return false, errors.New("El host no responde,por favor ingrese un email valido")
 	}
-	return true, nil     
-}    
+	return true, nil
+}
 
 //BeforeSave pasa el password por una funcion de hash
 func (u *User) BeforeSave() error {
@@ -54,6 +54,7 @@ func (u *User) BeforeSave() error {
 	if err != nil {
 		return err
 	}
+	u.Posts = []Post{}
 	if isValid {
 		u.ID = primitive.NewObjectID()
 		u.CreatedAt = time.Now()
@@ -81,4 +82,3 @@ func (u *User) ValidateAvailability(collection *mongo.Collection) (bool, error) 
 		return false, errors.New("El Nickname o el Email ya estan siendo utilizados")
 	}
 }
-          

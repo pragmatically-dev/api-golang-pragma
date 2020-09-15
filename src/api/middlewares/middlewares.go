@@ -3,8 +3,6 @@ package middlewares
 import (
 	"log"
 	"net/http"
-
-	"github.com/pragmatically-dev/apirest/src/api/responses"
 )
 
 //SetMiddlewareLogger se encarga de mostrar todas las peticiones que van llegando al sevidor
@@ -33,7 +31,8 @@ func SetMiddleWareAuthentication(next http.HandlerFunc) http.HandlerFunc {
 		auth2 := r.Header.Get("Token")
 		//TODO: Crear un servicio de verificación de tokens
 		if auth2 == "" {
-			responses.JSON(w, http.StatusForbidden, "No estas autorizado o token no expirado")
+			//responses.JSON(w, http.StatusForbidden, "No estas autorizado o token no expirado")
+			next(w, r)
 		} else {
 			next(w, r)
 		}
